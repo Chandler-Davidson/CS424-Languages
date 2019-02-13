@@ -7,6 +7,7 @@ def remove_duplicates(arr):
             clean_arr.append(el)
     return clean_arr
 
+
 def groupStudents(students):
     """Group students based on numeric grade.
     This function will return in the following format:
@@ -15,13 +16,41 @@ def groupStudents(students):
     # Student directory data structure
     combinedStudents = {}
 
-    ## Group students by numeric grade
+    # Group students by numeric grade
     for student in students:
+        # Select students that have matching grade
         sameStudents = list(filter(lambda x: x[0] == student[0], students))
+
+        # Map the students to a new array: [num of students, (student1), (student2)]
         studentInfo = list(map(lambda x: x[1], sameStudents))
+
+        # Add to the dictionary, student grade as the key
         combinedStudents[student[0]] = [len(studentInfo)] + studentInfo[:]
 
     return combinedStudents
+
+
+def rankStudents(studentRecord):
+    """Rank students by grade, returning
+    a string of the leaderboard."""
+
+    # Sort the student grades
+    rankedGrades = sorted(studentRecord, reverse=True)
+    currentRank = 1
+    ranking = ''
+
+    # Iterate through student grades
+    for grade in rankedGrades:
+
+        # The list of students with the given grade
+        students = studentRecord[grade][1:]
+
+        # Add the student to the ranking
+        for student in students:
+            ranking += str(currentRank) + ' ' + str(student) + "\n"
+        currentRank += len(students)
+    return ranking
+
 
 # Open the file, then split into an array of lines (one student per line)
 inputLines = open("indataP1.txt", "r").read().splitlines()
@@ -32,10 +61,13 @@ inputLines = remove_duplicates(inputLines)
 # Split the student information via spaces
 students = list(map(lambda x: x.split(' '), inputLines))
 
-# Restructure the student info into: [Grade, (ID, First, Last)] 
-students = list(map(lambda x: [x[0], tuple(x[1:])], students))
+# Restructure the student info into: [Grade, (ID, First, Last)]
+students = list(map(lambda x: [int(x[0]), tuple(x[1:])], students))
 
 # Group students using numeric grade
 groupedStudents = groupStudents(students)
 
-print(groupStudents)
+# Rank students by grade
+rankedStudents = rankStudents(groupedStudents)
+
+print(rankedStudents)
