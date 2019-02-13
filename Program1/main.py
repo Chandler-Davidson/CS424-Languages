@@ -8,48 +8,48 @@ def remove_duplicates(arr):
     return clean_arr
 
 
-def groupStudents(students):
+def group_students(students):
     """Group students based on numeric grade.
     This function will return in the following format:
         {'87': [2, ('B345', 'Pocahontas'), ('B456', 'Sally', 'Sharp')]}"""
 
     # Student directory data structure
-    combinedStudents = {}
+    studentDict = {}
 
     # Group students by numeric grade
     for student in students:
         # Select students that have matching grade
         sameStudents = list(filter(lambda x: x[0] == student[0], students))
 
-        # Map the students to a new array: [num of students, (student1), (student2)]
-        studentInfo = list(map(lambda x: x[1], sameStudents))
+        # Map each to student to only their (ID#, First, Last)
+        studentIDs = list(map(lambda x: tuple(x[1:]), sameStudents))
 
-        # Add to the dictionary, student grade as the key
-        combinedStudents[student[0]] = [len(studentInfo)] + studentInfo[:]
+        # Add students to the dictionary using the numeric grade as the key
+        studentDict[int(student[0])] = [len(studentIDs)] + [studentIDs]
 
-    return combinedStudents
+    return studentDict
 
 
-def rankStudents(studentRecord):
+def rank_students(studentDict):
     """Rank students by grade, returning
     a string of the leaderboard."""
 
     # Sort the student grades
-    rankedGrades = sorted(studentRecord, reverse=True)
+    rankedGrades = sorted(studentDict, reverse=True)
     currentRank = 1
-    ranking = ''
+    leaderboard = ''
 
     # Iterate through student grades
     for grade in rankedGrades:
 
         # The list of students with the given grade
-        students = studentRecord[grade][1:]
+        students = studentDict[grade][1]
 
-        # Add the student to the ranking
+        # Add the student to the leaderboard
         for student in students:
-            ranking += str(currentRank) + ' ' + str(student) + '\n'
+            leaderboard += (str(currentRank) + ' ' + str(student)) + '\n'
         currentRank += len(students)
-    return ranking
+    return leaderboard
 
 
 # Open the file, then split into an array of lines (one student per line)
@@ -61,13 +61,10 @@ inputLines = remove_duplicates(inputLines)
 # Split the student information via spaces
 students = list(map(lambda x: x.split(' '), inputLines))
 
-# Restructure the student info into: [Grade, (ID, First, Last)]
-students = list(map(lambda x: [int(x[0]), tuple(x[1:])], students))
-
 # Group students using numeric grade
-groupedStudents = groupStudents(students)
+studentDict = group_students(students)
 
 # Rank students by grade
-rankedStudents = rankStudents(groupedStudents)
+leaderboard = rank_students(studentDict)
 
-print(rankedStudents)
+print(leaderboard)
