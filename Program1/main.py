@@ -47,9 +47,23 @@ def rank_students(studentDict):
 
         # Add the student to the leaderboard
         for student in students:
-            leaderboard += (str(currentRank) + ' ' + str(student)) + '\n'
+            studentStr = '\t\t'.join(student)
+            leaderboard += str(currentRank) + '\t' + studentStr + '\n'
         currentRank += len(students)
     return leaderboard
+
+def generate_chart(studentDict):
+    """Generates a bar chart of student grades."""
+
+    # Should filter studentDict into number of occurrences of grade ranges.
+
+    rangesStr = []
+
+    for i in range(100, 0, -5):
+        low = i -4
+        applicableGrades = len(list(filter(lambda x: x <= i and x >= low, grades)))
+        rangesStr.append(str(i) + ' - ' + str(i - 4) + ':\t' + 'X' * applicableGrades)
+    return '\n'.join(rangesStr)
 
 
 # Open the file, then split into an array of lines (one student per line)
@@ -67,4 +81,9 @@ studentDict = group_students(students)
 # Rank students by grade
 leaderboard = rank_students(studentDict)
 
+# Pretty print the leaderboard
+print('RANK\tID#\t\tFIRST\t\tLAST')
+print('=' * 47)
 print(leaderboard)
+
+print(generate_chart(studentDict))
