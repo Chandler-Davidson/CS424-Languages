@@ -47,13 +47,13 @@ def rankStudents(studentRecord):
 
         # Add the student to the ranking
         for student in students:
-            ranking += str(currentRank) + ' ' + str(student) + "\n"
+            ranking += str(currentRank) + ' ' + str(student) + '\n'
         currentRank += len(students)
     return ranking
 
 
 # Open the file, then split into an array of lines (one student per line)
-inputLines = open("indataP1.txt", "r").read().splitlines()
+inputLines = open('indataP1.txt', 'r').read().splitlines()
 
 # Remove any duplicated students
 inputLines = remove_duplicates(inputLines)
