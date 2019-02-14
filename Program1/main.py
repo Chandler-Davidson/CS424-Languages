@@ -1,3 +1,19 @@
+def parse_file(filePath):
+    """Parses the given file then
+    returns a list of students:
+    [ ['87', 'B345', 'Pocahontas'],
+      [ '78', 'B999', 'Grace', 'Allen' ] ]"""
+
+    # Open the file, then split into an array of lines (one student per line)
+    inputLines = open(filePath, 'r').read().splitlines()
+
+    # Remove any duplicated students
+    inputLines = remove_duplicates(inputLines)
+
+    # Split the student information via spaces
+    return list(map(lambda x: x.split(' '), inputLines))
+
+
 def remove_duplicates(arr):
     """Removes duplicate elements within an array."""
 
@@ -9,9 +25,8 @@ def remove_duplicates(arr):
 
 
 def group_students(students):
-    """Group students based on numeric grade.
-    This function will return in the following format:
-        {'87': [2, ('B345', 'Pocahontas'), ('B456', 'Sally', 'Sharp')]}"""
+    """Group students based on their numeric grade:
+    {'87': [2, ('B345', 'Pocahontas'), ('B456', 'Sally', 'Sharp')]}"""
 
     # Student directory data structure
     studentDict = {}
@@ -32,7 +47,7 @@ def group_students(students):
 
 def rank_students(studentDict):
     """Rank students by grade, returning
-    a string of the leaderboard."""
+    the leaderboard as a string."""
 
     # Sort the student grades
     rankedGrades = sorted(studentDict, reverse=True)
@@ -52,38 +67,44 @@ def rank_students(studentDict):
         currentRank += len(students)
     return leaderboard
 
-def generate_chart(studentDict):
-    """Generates a bar chart of student grades."""
 
-    # Should filter studentDict into number of occurrences of grade ranges.
+def generate_leaderboard(leaderboard):
+    """Formats the leaderboard into a table."""
 
-    rangesStr = []
-
-    for i in range(100, 0, -5):
-        low = i -4
-        applicableGrades = len(list(filter(lambda x: x <= i and x >= low, grades)))
-        rangesStr.append(str(i) + ' - ' + str(i - 4) + ':\t' + 'X' * applicableGrades)
-    return '\n'.join(rangesStr)
+    output = 'RANK\tID #\t\tFIRST\t\tLAST\n'
+    output += '=' * 47
+    output += '\n' + leaderboard + '\n'
+    return output
 
 
-# Open the file, then split into an array of lines (one student per line)
-inputLines = open('indataP1.txt', 'r').read().splitlines()
+# def generate_chart(studentDict):
+#     """Generates a bar chart of student grades."""
 
-# Remove any duplicated students
-inputLines = remove_duplicates(inputLines)
+#     # Should filter studentDict into number of occurrences of grade ranges.
+#     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
+#     output = ''
 
-# Split the student information via spaces
-students = list(map(lambda x: x.split(' '), inputLines))
+#     for high in range(100, 0, -5):
+#         low = high - 4
+#         output += str(high) + ' - ' + str(high - 4) + ':\t'
+#         occurrences = 0
+
+#         output += 'X' * occurrences
+#         output += '\n'
+
+#     return output
+
+# Parse the file into a list of students
+students = parse_file('indataP1.txt')
 
 # Group students using numeric grade
 studentDict = group_students(students)
 
 # Rank students by grade
-leaderboard = rank_students(studentDict)
+rankedStudents = rank_students(studentDict)
 
-# Pretty print the leaderboard
-print('RANK\tID#\t\tFIRST\t\tLAST')
-print('=' * 47)
-print(leaderboard)
+# Format and print the student leaderboard
+# print(generate_leaderboard(rankedStudents))
 
+# Generate and print the bar chart
 print(generate_chart(studentDict))
