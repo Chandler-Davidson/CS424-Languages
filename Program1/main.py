@@ -76,23 +76,24 @@ def generate_leaderboard(leaderboard):
     output += '\n' + leaderboard + '\n'
     return output
 
+def count_matching(condition, seq):
+    """Returns the amount of items in seq that return true from condition"""
+    return sum(1 for item in seq if condition(item))
 
-# def generate_chart(studentDict):
-#     """Generates a bar chart of student grades."""
+def generate_chart(studentDict):
+    """Generates a bar chart of student grades."""
 
-#     # Should filter studentDict into number of occurrences of grade ranges.
-#     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
-#     output = ''
+    # Should filter studentDict into number of occurrences of grade ranges.
+    gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
+    output = ''
 
-#     for high in range(100, 0, -5):
-#         low = high - 4
-#         output += str(high) + ' - ' + str(high - 4) + ':\t'
-#         occurrences = 0
+    for high in range(100, 0, -5):
+        low = high - 4
+        output += str(high) + ' - ' + str(high - 4) + ':\t'
+        output += 'X' * count_matching(lambda x: high >= x[0] >= low, gradeOccurrences)
+        output += '\n'
 
-#         output += 'X' * occurrences
-#         output += '\n'
-
-#     return output
+    return output
 
 # Parse the file into a list of students
 students = parse_file('indataP1.txt')
