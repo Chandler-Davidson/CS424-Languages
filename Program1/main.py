@@ -78,7 +78,7 @@ def generate_leaderboard(leaderboard):
 
 def count_matching(condition, seq):
     """Returns the amount of items in seq that return true from condition"""
-    return sum(1 for item in seq if condition(item))
+    return sum(item[1] for item in seq if condition(item))
 
 def generate_chart(studentDict):
     """Generates a bar chart of student grades."""
@@ -87,11 +87,19 @@ def generate_chart(studentDict):
     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
     output = ''
 
-    for high in range(100, 0, -5):
+    for high in range(100, 64, -5):
         low = high - 4
-        output += str(high) + ' - ' + str(high - 4) + ':\t'
+        output += str(high) + ' - ' + str(high - 4) + ': '
+
+        if (high < 100):
+            output += ' '
+
         output += 'X' * count_matching(lambda x: high >= x[0] >= low, gradeOccurrences)
         output += '\n'
+
+    output += '60 - 0:   '
+    output += 'X' * count_matching(lambda x: 60 >= x[0] >= 0, gradeOccurrences)
+
 
     return output
 
