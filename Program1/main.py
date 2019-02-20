@@ -14,6 +14,11 @@ def parse_file(filePath):
     return list(map(lambda x: x.split(' '), inputLines))
 
 
+def save_to_file(contents, filePath):
+    """Saves the contents to the given file path"""
+    open(filePath, 'w').write(contents)
+
+
 def remove_duplicates(arr):
     """Removes duplicate elements within an array."""
 
@@ -33,14 +38,17 @@ def group_students(students):
 
     # Group students by numeric grade
     for student in students:
-        # Select students that have matching grade
-        sameStudents = list(filter(lambda x: x[0] == student[0], students))
+        try:
+            # Select students that have matching grade
+            sameStudents = list(filter(lambda x: x[0] == student[0], students))
 
-        # Map each to student to only their (ID#, First, Last)
-        studentIDs = list(map(lambda x: tuple(x[1:]), sameStudents))
+            # Map each to student to only their (ID#, First, Last)
+            studentIDs = list(map(lambda x: tuple(x[1:]), sameStudents))
 
-        # Add students to the dictionary using the numeric grade as the key
-        studentDict[int(student[0])] = [len(studentIDs)] + [studentIDs]
+            # Add students to the dictionary using the numeric grade as the key
+            studentDict[int(student[0])] = [len(studentIDs)] + [studentIDs]
+        except:
+            print('There was an error parsing the following student: ' + str(student))
 
     return studentDict
 
@@ -63,7 +71,8 @@ def rank_students(studentDict):
         # Add the student to the leaderboard
         for student in students:
             name = ' '.join(student[1:])
-            leaderboard += name + '\t' + student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
+            leaderboard += name + '\t' + \
+                student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
         currentRank += len(students)
     return leaderboard
 
@@ -73,12 +82,14 @@ def generate_leaderboard(leaderboard):
 
     output = 'NAME\t\tID\tGRADE\tRANK\n'
     output += '=' * 47
-    output += '\n' + leaderboard + '\n'
+    output += '\n' + leaderboard
     return output
+
 
 def count_matching(condition, seq):
     """Returns the amount of items in seq that return true from condition"""
     return sum(item[1] for item in seq if condition(item))
+
 
 def generate_chart(studentDict):
     """Generates a bar chart of student grades."""
@@ -87,7 +98,8 @@ def generate_chart(studentDict):
     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
     output = ''
 
-    output += '100 - 95: ' + 'X' * count_matching(lambda x: 100 >= x[0] >= 95, gradeOccurrences)
+    output += '100 - 95: ' + 'X' * \
+        count_matching(lambda x: 100 >= x[0] >= 95, gradeOccurrences)
     output += '\n'
 
     for high in range(94, 64, -5):
@@ -99,14 +111,16 @@ def generate_chart(studentDict):
 
     output += ' 60 -  0: '
     output += 'X' * count_matching(lambda x: 60 >= x[0] >= 0, gradeOccurrences)
+    output += '\n'
 
     return output
 
+
 print('This program is written to take in a file of student' +
-    'information and grades in the following format:\n\t' + 
-    '<grade> <id#> <name>\n\t<grade> <id#> <name>\n' + 
-    'After interpretting the input data, this program will output' +
-    'a bar chart of grade intervals and occurrences as well as a final grade report.')
+      'information and grades in the following format:\n\t' +
+      '<grade> <id#> <name>\n\t<grade> <id#> <name>\n' +
+      'After interpretting the input data, this program will output' +
+      'a bar chart of grade intervals and occurrences as well as a final grade report.\n\n\n')
 
 # Parse the file into a list of students
 students = parse_file('indataP1.txt')
@@ -118,7 +132,14 @@ studentDict = group_students(students)
 rankedStudents = rank_students(studentDict)
 
 # Format and print the student leaderboard
-print(generate_leaderboard(rankedStudents))
+leaderboard = generate_leaderboard(rankedStudents)
 
 # Generate and print the bar chart
-print(generate_chart(studentDict))
+chart = generate_chart(studentDict)
+
+print('STUDENT GRADE CHART:\n' + chart)
+
+print('STUDENT GRADE LEADERBOARD:\n' + leaderboard)
+
+save_to_file(chart, 'barchart.txt')
+save_to_file(leaderboard, 'sorted.txt')
