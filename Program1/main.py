@@ -87,17 +87,17 @@ def generate_chart(studentDict):
     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
     output = ''
 
-    for high in range(100, 64, -5):
-        low = high - 4
-        output += str(high) + ' - ' + str(high - 4) + ': '
+    output += '100 - 95: ' + 'X' * count_matching(lambda x: 100 >= x[0] >= 95, gradeOccurrences)
+    output += '\n'
 
-        if (high < 100):
-            output += ' '
+    for high in range(94, 64, -5):
+        low = high - 4
+        output += ' ' + str(high) + ' - ' + str(low) + ': '
 
         output += 'X' * count_matching(lambda x: high >= x[0] >= low, gradeOccurrences)
         output += '\n'
 
-    output += '60 - 0:   '
+    output += ' 60 -  0: '
     output += 'X' * count_matching(lambda x: 60 >= x[0] >= 0, gradeOccurrences)
 
     return output
@@ -118,7 +118,7 @@ studentDict = group_students(students)
 rankedStudents = rank_students(studentDict)
 
 # Format and print the student leaderboard
-# print(generate_leaderboard(rankedStudents))
+print(generate_leaderboard(rankedStudents))
 
 # Generate and print the bar chart
 print(generate_chart(studentDict))
