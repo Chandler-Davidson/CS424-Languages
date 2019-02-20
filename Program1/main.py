@@ -100,8 +100,13 @@ def generate_chart(studentDict):
     output += '60 - 0:   '
     output += 'X' * count_matching(lambda x: 60 >= x[0] >= 0, gradeOccurrences)
 
-
     return output
+
+print('This program is written to take in a file of student' +
+    'information and grades in the following format:\n\t' + 
+    '<grade> <id#> <name>\n\t<grade> <id#> <name>\n' + 
+    'After interpretting the input data, this program will output' +
+    'a bar chart of grade intervals and occurrences as well as a final grade report.')
 
 # Parse the file into a list of students
 students = parse_file('indataP1.txt')
