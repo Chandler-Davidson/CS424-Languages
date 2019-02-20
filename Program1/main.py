@@ -62,8 +62,8 @@ def rank_students(studentDict):
 
         # Add the student to the leaderboard
         for student in students:
-            studentStr = '\t\t'.join(student)
-            leaderboard += str(currentRank) + '\t' + studentStr + '\n'
+            name = ' '.join(student[1:])
+            leaderboard += name + '\t' + student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
         currentRank += len(students)
     return leaderboard
 
@@ -71,7 +71,7 @@ def rank_students(studentDict):
 def generate_leaderboard(leaderboard):
     """Formats the leaderboard into a table."""
 
-    output = 'RANK\tID #\t\tFIRST\t\tLAST\n'
+    output = 'NAME\t\tID\tGRADE\tRANK\n'
     output += '=' * 47
     output += '\n' + leaderboard + '\n'
     return output
