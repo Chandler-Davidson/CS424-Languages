@@ -21,7 +21,6 @@ def save_to_file(contents, filePath):
 
 def remove_duplicates(arr):
     """Removes duplicate elements within an array."""
-
     clean_arr = []
     for el in arr:
         if set(el) not in [set(x) for x in clean_arr]:
@@ -81,7 +80,7 @@ def generate_leaderboard(leaderboard):
     """Formats the leaderboard into a table."""
 
     output = 'NAME\t\tID\tGRADE\tRANK\n'
-    output += '=' * 47
+    output += '=' * 37
     output += '\n' + leaderboard
     return output
 
@@ -106,7 +105,8 @@ def generate_chart(studentDict):
         low = high - 4
         output += ' ' + str(high) + ' - ' + str(low) + ': '
 
-        output += 'X' * count_matching(lambda x: high >= x[0] >= low, gradeOccurrences)
+        output += 'X' * \
+            count_matching(lambda x: high >= x[0] >= low, gradeOccurrences)
         output += '\n'
 
     output += ' 60 -  0: '
@@ -116,11 +116,12 @@ def generate_chart(studentDict):
     return output
 
 
-print('This program is written to take in a file of student' +
+# Print program introduction
+print('This program is written to take in a file of student\n' +
       'information and grades in the following format:\n\t' +
       '<grade> <id#> <name>\n\t<grade> <id#> <name>\n' +
-      'After interpretting the input data, this program will output' +
-      'a bar chart of grade intervals and occurrences as well as a final grade report.\n\n\n')
+      'After interpretting the input data, this program will\noutput' +
+      'a bar chart of grade intervals and occurrences\nas well as a final grade report.\n\n\n')
 
 # Parse the file into a list of students
 students = parse_file('indataP1.txt')
@@ -137,9 +138,10 @@ leaderboard = generate_leaderboard(rankedStudents)
 # Generate and print the bar chart
 chart = generate_chart(studentDict)
 
+# Print the results to the screen
 print('STUDENT GRADE CHART:\n' + chart)
-
 print('STUDENT GRADE LEADERBOARD:\n' + leaderboard)
 
+# Sae the results to separate files
 save_to_file(chart, 'barchart.txt')
 save_to_file(leaderboard, 'sorted.txt')
