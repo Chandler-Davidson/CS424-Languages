@@ -69,9 +69,18 @@ def rank_students(studentDict):
 
         # Add the student to the leaderboard
         for student in students:
-            name = ' '.join(student[1:])
-            leaderboard += name + '\t' + \
-                student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
+            # Capture the name
+            name = student[1:]
+            leaderboard += ' '.join(name)
+
+            # Apply appropriate spacing
+            if (len(name) == 2):
+                leaderboard += '\t' * 1
+            else:
+                leaderboard += '\t' * 2
+
+            # Add the remainder of student information
+            leaderboard += student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
         currentRank += len(students)
     return leaderboard
 
