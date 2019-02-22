@@ -80,7 +80,10 @@ def rank_students(studentDict):
                 leaderboard += '\t' * 2
 
             # Add the remainder of student information
-            leaderboard += student[0] + '\t' + str(grade) + '\t' + str(currentRank) + '\n'
+            leaderboard += student[0] + '\t' + \
+                str(grade) + '\t' + str(currentRank) + '\n'
+
+        # Go to the next rank
         currentRank += len(students)
     return leaderboard
 
@@ -106,6 +109,7 @@ def generate_chart(studentDict):
     gradeOccurrences = list(map(lambda x: [x, studentDict[x][0]], studentDict))
     output = ''
 
+    # Draw the bar chart by counting the number of occurrences of each grade.
     output += '100 - 95: ' + 'X' * \
         count_matching(lambda x: 100 >= x[0] >= 95, gradeOccurrences)
     output += '\n'
@@ -130,7 +134,7 @@ print('This program is written to take in a file of student\n' +
       'information and grades in the following format:\n\t' +
       '<grade> <id#> <name>\n\t<grade> <id#> <name>\n' +
       'After interpretting the input data, this program will\noutput' +
-      'a bar chart of grade intervals and occurrences\nas well as a final grade report.\n\n\n')
+      ' a bar chart of grade intervals and occurrences\nas well as a final grade report.\n\n\n')
 
 # Parse the file into a list of students
 students = parse_file('indataP1.txt')
